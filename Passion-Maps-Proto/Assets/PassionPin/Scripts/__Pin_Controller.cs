@@ -20,6 +20,8 @@ public class __Pin_Controller : __God_Object{
 
     private bool Highlighted = false;
 
+    private float storedRot = 0.0f;
+
     private void Update()
     {
         SetCol();
@@ -69,7 +71,7 @@ public class __Pin_Controller : __God_Object{
         {
             if (Input.touchCount == 1)
             {
-                transform.position = Input.GetTouch(0).position;
+                transform.position = new Vector3(transform.position.x + Input.GetTouch(0).deltaPosition.x, transform.position.y + Input.GetTouch(0).deltaPosition.y, 0);
             }
             else if (Input.touchCount == 2)
             {
