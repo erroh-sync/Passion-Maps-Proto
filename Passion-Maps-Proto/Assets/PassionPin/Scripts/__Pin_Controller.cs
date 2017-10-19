@@ -11,9 +11,6 @@ public class __Pin_Controller : __God_Object{
     [SerializeField]
     private GameObject[] pinObjs = new GameObject[4];
 
-    [SerializeField]
-    private GameObject highlight;
-
     private Vector2 initialTouchPoint = new Vector2(-1, -1);
 
     private bool ctrl = false;
@@ -25,7 +22,6 @@ public class __Pin_Controller : __God_Object{
     private void Update()
     {
         SetCol();
-        highlight.active = Highlighted;
         Control();
     }
 
@@ -34,9 +30,9 @@ public class __Pin_Controller : __God_Object{
         for(int i = 0; i < pinObjs.Length; i++) 
         {
             if ((int)col == i)
-                pinObjs[i].active = true;
+                pinObjs[i].SetActive(true);
             else
-                pinObjs[i].active = false;
+                pinObjs[i].SetActive(false);
         }
     }
 
