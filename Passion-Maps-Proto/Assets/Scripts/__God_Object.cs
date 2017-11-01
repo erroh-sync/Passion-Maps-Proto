@@ -10,7 +10,7 @@ public class __God_Object : MonoBehaviour {
     [SerializeField]
     private Animator Anim;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         Anim.SetBool("Active", true);
     }

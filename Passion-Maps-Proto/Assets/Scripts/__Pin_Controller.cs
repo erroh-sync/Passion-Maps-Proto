@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct __Pin_Journal_Data
+{
+    public string Heading;
+    public string Content;
+};
+
 public class __Pin_Controller : __God_Object{
 
     public enum PinCol { Blue, Red, Gray, Green};
@@ -11,13 +17,24 @@ public class __Pin_Controller : __God_Object{
     [SerializeField]
     private GameObject[] pinObjs = new GameObject[4];
 
+    [SerializeField]
+    private GameObject RotationPoint;
+
+    [SerializeField]
+    private GameObject Menu;
+
+    [SerializeField]
+    private float MenuOpenThreshold = 0.2f;
+
+    public List<__Pin_Journal_Data> JournalEntries = new List<__Pin_Journal_Data>();
+
     private Vector2 initialTouchPoint = new Vector2(-1, -1);
 
     private bool ctrl = false;
 
-    private bool Highlighted = false;
-
     private float storedRot = 0.0f;
+
+    private float ctrlTimer = 0.0f;
 
     private void Update()
     {
@@ -36,29 +53,29 @@ public class __Pin_Controller : __God_Object{
         }
     }
 
-    public void UnHighlight()
+    public void CloseMenu()
     {
-        Highlighted = false;
+        Menu.GetComponent<__Pin_Menu_Controller>().enabled = false;
     }
 
     public void StartContol()
     {
         ctrl = true;
-        if (Highlighted)
-        {
-            this.enabled = false;
-        }
-        else
-        {
-            foreach (__Pin_Controller p in FindObjectsOfType<__Pin_Controller>())
-                p.UnHighlight();
-            Highlighted = true;
-        }
+        ctrlTimer = 0.0f;
+        GameObject.FindGameObjectWithTag("SpawnMenu").GetComponent<__Color_Menu_Controller>().enabled = false;
     }
 
     public void EndControl()
     {
         ctrl = false;
+        if(ctrlTimer < MenuOpenThreshold)
+        {
+            foreach (__Pin_Controller p in FindObjectsOfType<__Pin_Controller>())
+            {
+                p.CloseMenu();
+            }
+            Menu.GetComponent<__Pin_Menu_Controller>().enabled = true;
+        }
     }
 
     public void Control()
@@ -71,8 +88,13 @@ public class __Pin_Controller : __God_Object{
             }
             else if (Input.touchCount == 2)
             {
-                transform.eulerAngles = new Vector3(0, 0, Vector3.Angle(Input.GetTouch(0).position, Input.GetTouch(1).position));
+                RotationPoint.transform.eulerAngles = new Vector3(0, 0, Vector3.Angle(Input.GetTouch(0).position, Input.GetTouch(1).position) * 2);
             }
         }
+    }
+
+    public void KillMe()
+    {
+        Destroy(this.gameObject);
     }
 }

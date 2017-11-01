@@ -21,5 +21,10 @@ public class __Click_Manager : MonoBehaviour {
             m.enabled = true;
             Menu.transform.position = Input.mousePosition;
         }
+
+        foreach(__Pin_Controller p in FindObjectsOfType<__Pin_Controller>())
+        {
+            p.CloseMenu();
+        }
     }
 }
